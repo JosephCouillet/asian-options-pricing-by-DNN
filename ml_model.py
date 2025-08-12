@@ -4,17 +4,17 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 import joblib
 
-# 1. Chargement
+# loading
 df = pd.read_csv('data/pricing_dataset.csv')
 X, y = df[['S0','K','sigma','T','r']].values, df['price'].values.reshape(-1,1)
 
-# 2. Normalisation
+# normalization
 sc_X, sc_y = StandardScaler(), StandardScaler()
 X, y = sc_X.fit_transform(X), sc_y.fit_transform(y)
 
 X_tr, X_va, y_tr, y_va = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# 3. Modèle
+# model
 class MLP(nn.Module):
     def __init__(self):
         super().__init__()
@@ -29,7 +29,7 @@ class MLP(nn.Module):
 model, loss_fn = MLP(), nn.MSELoss()
 opt = optim.Adam(model.parameters(), lr=1e-3)
 
-# 4. Entraînement
+# training
 data_tr = torch.utils.data.TensorDataset(
     torch.from_numpy(X_tr).float(), torch.from_numpy(y_tr).float()
 )
@@ -49,10 +49,9 @@ for epoch in range(1,51):
                         torch.from_numpy(y_va).float()).item()
         print(f"Epoch {epoch} – train={l/len(loader.dataset):.4f} – val={v:.4f}")
 
-# 5. Sauvegarde
-# 1) save model weights only
+# save model weights
 torch.save(model.state_dict(), 'models/mlp_weights.pt')
-# 2) save scalers separately
+# save scalers separately
 joblib.dump(sc_X, 'models/scaler_X.pkl')
 joblib.dump(sc_y, 'models/scaler_y.pkl')
 
