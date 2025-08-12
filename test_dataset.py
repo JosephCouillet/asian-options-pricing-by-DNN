@@ -1,4 +1,4 @@
-### some checks of the database pricing_dataset"
+### some checks of the database pricing_dataset
 import pandas as pd
 
 df = pd.read_csv('data/pricing_dataset.csv')
