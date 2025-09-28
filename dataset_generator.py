@@ -8,7 +8,6 @@ sigma_min, sigma_max = 0.1, 0.5
 T_min, T_max     = 0.1, 2.0
 r_min, r_max = 0.0, 0.08
 
-### Monte-Carlo simulation
 def price_asian_mc(S0, K, T, sigma, r, n_paths=10_000, n_steps=100):
     dt = T / n_steps
     S = np.zeros((n_paths, n_steps+1))

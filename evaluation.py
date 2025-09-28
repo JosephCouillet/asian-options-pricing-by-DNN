@@ -5,12 +5,12 @@ import matplotlib.pyplot as plt
 from ml_model import MLP
 import joblib
 
-# Load dataset
+"It is necessary to run ml_model before running this program "
+
 df = pd.read_csv('data/pricing_dataset.csv')
 X = df[['S0','K','sigma','T','r']].values
 y_true = df['price'].values
 
-# Load trained model and scalers (no training here)
 state = torch.load('models/mlp_weights.pt', map_location='cpu')
 model = MLP()
 model.load_state_dict(state)
@@ -18,8 +18,6 @@ model.eval()
 
 sc_X = joblib.load('models/scaler_X.pkl')
 sc_y = joblib.load('models/scaler_y.pkl')
-
-# Predict
 X_scaled = sc_X.transform(X)
 with torch.no_grad():
     y_pred_scaled = model(torch.from_numpy(X_scaled).float()).detach().numpy()
